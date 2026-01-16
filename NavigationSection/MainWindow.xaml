@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="NavigationSection.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:NavigationSection"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="NavigationSection">
+
+    <Window.SystemBackdrop>
+        <MicaBackdrop />
+    </Window.SystemBackdrop>
+
+    <!-- Grid para ocupar toda la ventana -->
+    <Grid>
+        <NavigationView
+            x:Name="navPrincipal"
+            PaneDisplayMode="Left"
+            AlwaysShowHeader="True"
+            IsBackButtonVisible="Collapsed"
+            Width="Auto"
+            SelectionChanged="NavigationView_SelectionChanged">
+
+            <!-- HEADER -->
+            <NavigationView.Header>
+                <Grid>
+                    <!-- Header 1 -->
+                    <StackPanel
+            x:Name="HeaderEditable"
+            Orientation="Horizontal"
+            Spacing="12"
+            Visibility="Collapsed">
+
+                        <TextBlock
+                x:Name="HeaderTitle"
+                FontSize="24"
+                FontWeight="Semibold" />
+                    </StackPanel>
+
+                    <!-- Header 2 -->
+                    <StackPanel
+            x:Name="HeaderCategorias"
+            Orientation="Horizontal"
+            Spacing="5">
+
+                        <TextBlock
+                x:Name="HeaderEditableDos"
+                FontSize="30"
+                FontWeight="Semibold" />
+                    </StackPanel>
+                </Grid>
+            </NavigationView.Header>
+
+
+            <!-- MENÚ PRINCIPAL -->
+            <NavigationView.MenuItems>
+                <NavigationViewItem
+                    Content="Disfraces"
+                    Icon="Admin"
+                    ToolTipService.ToolTip="Disfraces"
+                    Tag="Mis Disfraces" />
+                <NavigationViewItem
+                    Content="Prendas"
+                    Icon="Admin"
+                    ToolTipService.ToolTip="Prendas"
+                    Tag="Mis Prendas" />
+                <!--NavigationViewItem Content="Account" Icon="Contact" ToolTipService.ToolTip="Account" Tag="SamplePage2">
+                    <NavigationViewItem.MenuItems>
+                        <NavigationViewItem Content="Mail" Icon="Mail" ToolTipService.ToolTip="Mail" Tag="SamplePage3"/>
+                        <NavigationViewItem Content="Calendar" Icon="Calendar" ToolTipService.ToolTip="Calendar" Tag="SamplePage4"/>
+                    </NavigationViewItem.MenuItems>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Document options" Icon="Page2" ToolTipService.ToolTip="Document options" SelectsOnInvoked="False">
+                    <NavigationViewItem.MenuItems>
+                        <NavigationViewItem Content="Create new" Icon="NewFolder" ToolTipService.ToolTip="Create new" Tag="SamplePage5"/>
+                        <NavigationViewItem Content="Upload file" Icon="OpenLocal" ToolTipService.ToolTip="Upload file" Tag="SamplePage6"/>
+                    </NavigationViewItem.MenuItems>
+                </NavigationViewItem-->
+            </NavigationView.MenuItems>
+
+            <!-- CONTENIDO -->
+            <Frame x:Name="ContentFrame" />
+        </NavigationView>
+    </Grid>
+</Window>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="NavigationSection.NuevaCategoriaPrendas"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:NavigationSection"
+    xmlns:models="using:NavigationSection.Model"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <!-- DataTemplate for folders -->
+        <DataTemplate x:Key="FolderTemplate" x:DataType="local:ExplorerItem">
+            <TreeViewItem AutomationProperties.Name="{x:Bind Name}"
+                ItemsSource="{x:Bind Children}" IsExpanded="True">
+                <StackPanel Orientation="Horizontal">
+                    <Image Width="10" Source="../Assets/SampleMedia/folder.png"/>
+                    <TextBlock Margin="0,0,5,0"/>
+                    <TextBlock Text="{x:Bind Name}" />
+                </StackPanel>
+            </TreeViewItem>
+        </DataTemplate>
+
+        <!-- DataTemplate for files -->
+        <DataTemplate x:Key="FileTemplate" x:DataType="local:ExplorerItem">
+            <TreeViewItem AutomationProperties.Name="{x:Bind Name}">
+                <StackPanel Orientation="Horizontal">
+                    <FontIcon Glyph="&#xE8A5;" />
+                    <TextBlock Margin="0,0,5,0"/>
+                    <TextBlock Text="{x:Bind Name}"/>
+                </StackPanel>
+            </TreeViewItem>
+        </DataTemplate>
+
+        <!-- Template selector for ExplorerItem types -->
+        <local:ExplorerItemTemplateSelector x:Key="ExplorerItemTemplateSelector"
+            FolderTemplate="{StaticResource FolderTemplate}"
+            FileTemplate="{StaticResource FileTemplate}" />
+        
+    </Page.Resources>
+
+    <Grid Padding="20" ColumnDefinitions="300,*" RowDefinitions="Auto">
+        <Border Grid.Column="0"
+        x:Name="ImageDropBorder"
+        BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"
+        BorderThickness="2"
+        CornerRadius="12"
+        Padding="16"
+        Background="{ThemeResource SystemControlAcrylicElementBrush}"
+        AllowDrop="True"
+        Drop="Image_Drop"
+        DragOver="Image_DragOver"
+        DragLeave="Image_DragLeave">
+
+            <StackPanel Spacing="12"
+                HorizontalAlignment="Center">
+
+                <!-- Título -->
+                <TextBlock Text="Imagen de la categoría"
+                   FontSize="16"
+                   FontWeight="SemiBold"
+                   HorizontalAlignment="Center"/>
+
+                <!-- Preview -->
+                <Border CornerRadius="8"
+                Width="220"
+                Height="220"
+                BorderThickness="1"
+                BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}">
+                    <Image x:Name="PreviewImage"
+                   Stretch="UniformToFill"
+                   Source="/Assets/SampleMedia/placeholder.png"/>
+                </Border>
+
+                <!-- Botón -->
+                <Button Click="BtnElegirImagen_Click"
+                HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon Glyph="&#xE114;" />
+                        <!-- icono imagen -->
+                        <TextBlock Text="Seleccionar imagen"/>
+                    </StackPanel>
+                </Button>
+
+                <!-- Hint -->
+                <TextBlock Text="Arrastra una imagen aquí o haz clic para elegir"
+                   FontSize="12"
+                   Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                   TextAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+
+        <StackPanel Grid.Column="1" Spacing="12" Padding="20,0,0,0">
+            <TextBox x:Name="TxtNombre"
+                     Header="Nombre"
+                     PlaceholderText="Nombre de la categoría"/>
+            <TextBox x:Name="TxtDescripcion"
+                     Header="Descripción"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap"
+                     Height="80"
+                     PlaceholderText="Descripción"/>
+            <TextBlock Text="Es subcategoría de:"
+                       FontWeight="SemiBold"/>
+
+            <TreeView x:Name="TreeCategorias"
+                      ItemsSource="{x:Bind DataSource}"
+                      ItemTemplateSelector="{StaticResource ExplorerItemTemplateSelector}"
+                      />
+
+            <Button Content="Guardar"
+                    HorizontalAlignment="Right"
+                    Width="120"
+                    Click="BtnGuardar_Click"/>
+        </StackPanel>
+    </Grid>
+
+</Page>

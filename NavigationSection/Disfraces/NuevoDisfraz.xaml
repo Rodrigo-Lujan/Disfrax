@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="NavigationSection.NuevoDisfraz"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:NavigationSection"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:NavigationSection.Model"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+
+        <!--  ESTILO BASE PARA ITEMS  -->
+        <Style x:Key="ExplorerTreeItemStyle" TargetType="TreeViewItem">
+            <Setter Property="Padding" Value="6"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        </Style>
+
+        <!-- ===== TEMPLATE CARPETA ===== -->
+        <DataTemplate x:Key="FolderTemplate" x:DataType="local:ExplorerItem">
+            <TreeViewItem ItemsSource="{x:Bind Children}"
+                      IsExpanded="True"
+                      Style="{StaticResource ExplorerTreeItemStyle}"
+                      AutomationProperties.Name="{x:Bind Name}">
+
+                <Border x:Name="RootBorder"
+                    CornerRadius="2"
+                    >
+                    <StackPanel Orientation="Horizontal" Spacing="1">
+
+                        <!-- Icono carpeta -->
+                        <FontIcon Glyph="&#xE8B7;"
+                              FontSize="12"
+                              Foreground="#F1C40F"/>
+
+                        <!-- Nombre -->
+                        <TextBlock Text="{x:Bind Name}"
+                               VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+            </TreeViewItem>
+        </DataTemplate>
+
+        <!-- ===== TEMPLATE ARCHIVO ===== -->
+        <DataTemplate x:Key="FileTemplate" x:DataType="local:ExplorerItem">
+            <TreeViewItem Style="{StaticResource ExplorerTreeItemStyle}"
+                      AutomationProperties.Name="{x:Bind Name}">
+
+                <Border x:Name="RootBorder"
+                    CornerRadius="6"
+                    Padding="6">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+
+                        <!-- Icono archivo -->
+                        <FontIcon Glyph="&#xE8A5;"
+                              FontSize="16"
+                              Foreground="#3498DB"/>
+
+                        <!-- Nombre -->
+                        <TextBlock Text="{x:Bind Name}"
+                               VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+            </TreeViewItem>
+        </DataTemplate>
+
+        <!-- ===== SELECTOR ===== -->
+        <local:ExplorerItemTemplateSelector
+        x:Key="ExplorerItemTemplateSelector"
+        FolderTemplate="{StaticResource FolderTemplate}"
+        FileTemplate="{StaticResource FileTemplate}" />
+
+    </Page.Resources>
+
+
+
+    <ScrollView>
+        <Grid Padding="20"
+          RowDefinitions="Auto,Auto"
+          RowSpacing="24">
+
+            <!-- ================== FILA 1: Imagen + Datos ================== -->
+            <Grid ColumnDefinitions="Auto,24,*">
+                <!-- Imagen -->
+                <Border Grid.Column="0"
+                    x:Name="ImageDropBorder"
+                    BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"
+                    BorderThickness="2"
+                    CornerRadius="12"
+                    Padding="16"
+                    Background="{ThemeResource SystemControlAcrylicElementBrush}"
+                    AllowDrop="True"
+                    Drop="Image_Drop"
+                    DragOver="Image_DragOver"
+                    DragLeave="Image_DragLeave"
+                    MaxWidth="280">
+
+                    <StackPanel Spacing="12" HorizontalAlignment="Center">
+
+                        <TextBlock Text="Imagen del disfraz"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Center"/>
+
+                        <Border CornerRadius="8"
+                            Width="190"
+                            Height="380"
+                            BorderThickness="1"
+                            BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}">
+                            <Image x:Name="PreviewImage"
+                               Stretch="UniformToFill"
+                               Source="/Assets/SampleMedia/placeholder.png"/>
+                        </Border>
+
+                        <Button Click="BtnElegirImagen_Click">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xE114;" />
+                                <TextBlock Text="Seleccionar imagen"/>
+                            </StackPanel>
+                        </Button>
+
+                        <TextBlock Text="Arrastra una imagen aquí o haz clic para elegir"
+                               FontSize="12"
+                               Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                               TextAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Datos -->
+                <StackPanel Grid.Column="2"
+                        Spacing="14">
+
+                    <TextBox x:Name="TxtNombre"
+                         Header="Nombre"
+                         PlaceholderText="Nombre del disfraz"/>
+
+                    <TextBox x:Name="TxtDescripcion"
+                         Header="Descripción"
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap"
+                         Height="80"/>
+
+                    <TextBlock Text="Es subcategoría de:"
+                           FontWeight="SemiBold"/>
+
+                    <TreeView x:Name="TreeCategorias"
+                          ItemsSource="{x:Bind DataSource}"
+                          ItemTemplateSelector="{StaticResource ExplorerItemTemplateSelector}"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- ================== FILA 2: Precios + Tallas ================== -->
+            <Grid Grid.Row="1"
+              ColumnDefinitions="320,24,*">
+
+                <!-- Precios y género -->
+                <StackPanel Grid.Column="0"
+                        Spacing="16">
+
+                    <RadioButtons x:Name="RadioButtonGenero" Header="Género">
+                        <RadioButton Content="Hombre" Tag="H"/>
+                        <RadioButton Content="Mujer" Tag="M"/>
+                        <RadioButton Content="Ambos" Tag="A"/>
+                    </RadioButtons>
+
+                    <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="20">
+
+                        <NumberBox x:Name="NumberPrecioVenta"
+                                   Grid.Column="0"
+                                   PlaceholderText="0.00">
+                            <NumberBox.Header>
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <FontIcon Glyph="&#xE8C7;"
+                                              Foreground="Green"
+                                              FontSize="16"/>
+
+                                    <TextBlock Text="Precio de venta"/>
+                                </StackPanel>
+                            </NumberBox.Header>
+                        </NumberBox>
+
+                        <NumberBox x:Name="NumberPrecioAlquiler"
+                                   Grid.Column="1"
+                                   PlaceholderText="0.00">
+                            <NumberBox.Header>
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <FontIcon Glyph="&#xE8C7;"
+                                              Foreground="Orange"
+                                              FontSize="16"/>
+                                    <TextBlock Text="Precio de alquiler"/>
+                                </StackPanel>
+                            </NumberBox.Header>
+                        </NumberBox>
+
+                    </Grid>
+
+
+                </StackPanel>
+
+                <!-- Tallas -->
+                <StackPanel Grid.Column="2"
+                        Spacing="12">
+
+                    <ComboBox x:Name="CmbTipoPrenda"
+                          Header="Tipo de prenda"
+                          SelectionChanged="CmbTipoPrenda_SelectionChanged" Padding="4">
+                        <ComboBoxItem Content="Polo"/>
+                        <ComboBoxItem Content="Camisa"/>
+                        <ComboBoxItem Content="Casaca"/>
+                        <ComboBoxItem Content="Pantalón"/>
+                        <ComboBoxItem Content="Falda"/>
+                        <ComboBoxItem Content="Otro"/>
+                    </ComboBox>
+                    <!-- Las tallas y nuevo stock -->
+                    <StackPanel>
+                        <TextBlock Text="Datos del nuevo Stock" FontSize="12"/>
+                        <Button Content="➕ Añadir talla"
+                            HorizontalAlignment="Right"
+                            Background="SkyBlue"
+                            Click="Agregar_Click"/>
+                    </StackPanel>
+                    <ListBox ItemsSource="{x:Bind ListaStock.Tallas}"
+                         SelectionMode="Single">
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="models:TallaStock">
+
+                                <Grid ColumnSpacing="10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Talla -->
+                                    <StackPanel>
+                                        <TextBlock Text="Talla" FontSize="12"/>
+                                        <NumberBox Width="80"
+                                               Minimum="2"
+                                               Maximum="60"
+                                               Value="{x:Bind Talla, Mode=TwoWay}"/>
+                                    </StackPanel>
+
+                                    <!-- Stock -->
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="Stock" FontSize="12"/>
+                                        <NumberBox Width="80"
+                                               Minimum="0"
+                                               Value="{x:Bind Stock, Mode=TwoWay}"/>
+                                    </StackPanel>
+
+                                    <Grid Grid.Column="2"/>
+
+                                    <!-- Acciones -->
+                                    <StackPanel Grid.Column="3"
+                                            Orientation="Horizontal"
+                                            Spacing="6">
+
+                                        <Button Click="Editar_Click"
+                                                Background="Transparent">
+                                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                                <FontIcon Glyph="&#xE70F;"
+                                                          Foreground="Green"/>
+                                                <TextBlock Text="Editar"
+                                                           Foreground="Green"/>
+                                            </StackPanel>
+                                        </Button>
+
+                                        <Button Click="Eliminar_Click"
+                                                Background="Transparent">
+                                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                                <FontIcon Glyph="&#xE74D;"
+                                                          Foreground="Red"/>
+                                                <TextBlock Text="Eliminar"
+                                                           Foreground="Red"/>
+                                            </StackPanel>
+                                        </Button>
+
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Button
+                        Content="Guardar disfraz"
+                        Click="BtnGuardar_Click"
+                        />
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </ScrollView>
+
+
+</Page>

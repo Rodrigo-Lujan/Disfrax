@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="NavigationSection.CategoriasPrendas"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:NavigationSection"
+    xmlns:models="using:NavigationSection.Model"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <DataTemplate x:Key="ImageOverlayTemplate" x:DataType="models:Categoria">
+            <Button Click="Click_Categoria" DataContext="{x:Bind}">
+                <Grid Width="180" Height="170">
+                    <Image
+                        Source="{Binding Imagen}"
+                        Stretch="UniformToFill"/>
+                    <StackPanel
+                        VerticalAlignment="Bottom"
+                        Background="#AA000000"
+                        Padding="6">
+
+                        <TextBlock
+                            Text="{x:Bind Nombre}"
+                            Foreground="White"
+                            FontWeight="Bold"/>
+                    </StackPanel>
+                </Grid>
+            </Button>
+        </DataTemplate>
+        <DataTemplate x:Key="PrendaTemplate"
+              x:DataType="models:Prenda">
+
+            <Border
+        Margin="0,10"
+        Padding="14"
+        CornerRadius="14"
+        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+        BorderThickness="1"
+        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}">
+
+                <Grid ColumnDefinitions="Auto,*"
+              ColumnSpacing="16">
+
+                    <!-- IMAGEN -->
+                    <Border
+                Width="120"
+                Height="120"
+                CornerRadius="10"
+                Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}">
+
+                        <Image
+                    Source="{x:Bind Imagen}"
+                    Stretch="UniformToFill"/>
+                    </Border>
+
+                    <!-- CONTENIDO -->
+                    <Grid Grid.Column="1"
+                  RowDefinitions="Auto,Auto,Auto,Auto"
+                  RowSpacing="8">
+
+                        <!-- NOMBRE + GÉNERO -->
+                        <StackPanel Grid.Row="0"
+                            Orientation="Horizontal"
+                            Spacing="8">
+
+                            <TextBlock
+                        Text="{x:Bind Nombre}"
+                        FontSize="17"
+                        FontWeight="SemiBold"
+                        TextTrimming="CharacterEllipsis"/>
+                        </StackPanel>
+
+                        <!-- DESCRIPCIÓN -->
+                        <TextBlock Grid.Row="1"
+                           Text="{x:Bind Descripcion}"
+                           FontSize="13"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                           TextWrapping="Wrap"
+                           MaxLines="2"/>
+
+                        <!-- ACCIONES -->
+                        <StackPanel Grid.Row="3"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            Spacing="8">
+
+                            <Button Background="Green"
+                            ToolTipService.ToolTip="Editar">
+                                <FontIcon Glyph="&#xE70F;"
+                                  Foreground="White"/>
+                            </Button>
+
+                            <Button Background="Red"
+                            ToolTipService.ToolTip="Eliminar">
+                                <FontIcon Glyph="&#xE74D;"
+                                  Foreground="White"/>
+                            </Button>
+                        </StackPanel>
+
+                    </Grid>
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+
+    </Page.Resources>
+
+    <Grid Padding="12">
+
+        <Grid.RowDefinitions>
+            <!-- Breadcrumb + CommandBar -->
+            <RowDefinition Height="Auto"/>
+            <!-- Contenido -->
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Barra superior -->
+        <Border
+        Grid.Row="0"
+        Background="#F2F2F2"
+        Padding="8"
+        BorderBrush="#D0D0D0"
+        BorderThickness="1"
+        CornerRadius="8">
+
+            <Grid ColumnDefinitions="*,Auto"
+              VerticalAlignment="Center">
+
+                <!-- Breadcrumb -->
+                <BreadcrumbBar
+                x:Name="BreadcrumbBar2"
+                VerticalAlignment="Center"
+                Margin="12,0,0,0">
+
+                    <BreadcrumbBar.ItemTemplate>
+                        <DataTemplate x:DataType="models:Folder">
+                            <BreadcrumbBarItem Content="{Binding}">
+                                <BreadcrumbBarItem.ContentTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                        Text="{Binding Name}"
+                                        FontSize="14"
+                                        FontWeight="SemiBold"/>
+                                    </DataTemplate>
+                                </BreadcrumbBarItem.ContentTemplate>
+                            </BreadcrumbBarItem>
+                        </DataTemplate>
+                    </BreadcrumbBar.ItemTemplate>
+                </BreadcrumbBar>
+
+                <!-- CommandBar -->
+                <CommandBar
+                Grid.Column="1"
+                DefaultLabelPosition="Right"
+                Background="Transparent">
+
+                    <AppBarButton
+                    Icon="NewFolder"
+                    Label="Nueva categoría"
+                    Click="Click_NuevaCategoria"/>
+
+                    <AppBarButton
+                    Icon="Add"
+                    Label="Nuevo prenda"
+                    Click="Click_NuevaPrenda"/>
+                </CommandBar>
+
+            </Grid>
+        </Border>
+
+        <!-- Contenedor principal -->
+        <Border
+            Grid.Row="1"
+            Margin="16"
+            Padding="16"
+            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="12">
+
+            <Grid RowDefinitions="Auto,Auto,Auto,*"
+          RowSpacing="16">
+
+                <!-- Header Subcategorías -->
+                <StackPanel Grid.Row="0"
+                            Orientation="Horizontal"
+                            Spacing="6">
+                    <FontIcon Glyph="&#xE8FD;" FontSize="14"/>
+                    <TextBlock
+                        Text="Subcategorías"
+                        FontSize="14"
+                        FontWeight="SemiBold"/>
+                </StackPanel>
+
+                <!-- Grid de subcategorías -->
+                <Grid Grid.Row="1">
+                    <GridView
+                        x:Name="StyledGrid"
+                        ItemTemplate="{StaticResource ImageOverlayTemplate}"
+                        HorizontalAlignment="Stretch">
+
+                        <GridView.ItemContainerStyle>
+                            <Style TargetType="GridViewItem"
+                                    BasedOn="{StaticResource DefaultGridViewItemStyle}">
+                                <Setter Property="Margin" Value="10"/>
+                                <Setter Property="CornerRadius" Value="12"/>
+                            </Style>
+                        </GridView.ItemContainerStyle>
+
+                        <GridView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ItemsWrapGrid
+                            Orientation="Horizontal"
+                            MaximumRowsOrColumns="5"/>
+                            </ItemsPanelTemplate>
+                        </GridView.ItemsPanel>
+                    </GridView>
+
+                    <!-- Estado vacío -->
+                    <StackPanel
+                        x:Name="TextSinCategorias"
+                        Visibility="Collapsed"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Spacing="8">
+
+                        <FontIcon Glyph="&#xE7C3;"
+                          FontSize="48"
+                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+
+                        <TextBlock
+                            Text="No hay subcategorías"
+                            FontSize="18"
+                            FontWeight="Medium"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Header Prendas -->
+                <StackPanel Grid.Row="2"
+                            Orientation="Horizontal"
+                            Spacing="6">
+                    <FontIcon Glyph="&#xE8FD;" FontSize="14"/>
+                    <TextBlock
+                        Text="Prendas"
+                        FontSize="14"
+                        FontWeight="SemiBold"/>
+                </StackPanel>
+
+                <!-- Lista de Prendas -->
+                <Border
+                    Grid.Row="3"
+                    Padding="12"
+                    CornerRadius="10"
+                    BorderThickness="1"
+                    BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                    Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}">
+
+                    <Grid>
+                        <!-- Lista -->
+                        <ListView
+                            x:Name="ListaPrendas"
+                            MinHeight="350"
+                            ItemTemplate="{StaticResource PrendaTemplate}"
+                            SelectionMode="None"
+                            IsItemClickEnabled="True"
+                            HorizontalContentAlignment="Stretch"
+                            ItemClick="ListaPrenda_Click"/>
+
+                        <!-- Estado vacío -->
+                        <StackPanel
+                            x:Name="TextSinPrendas"
+                            Visibility="Collapsed"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Spacing="8">
+
+                            <FontIcon
+                                Glyph="&#xE7C3;"
+                                FontSize="48"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+
+                            <TextBlock
+                                Text="No hay prendas"
+                                FontSize="18"
+                                FontWeight="Medium"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+            </Grid>
+        </Border>
+    </Grid>
+</Page>

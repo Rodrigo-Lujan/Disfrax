@@ -1,0 +1,155 @@
+<Window
+    x:Class="NavigationSection.VerPrendaWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:models="using:NavigationSection.Model"
+    xmlns:local="using:NavigationSection"
+    xmlns:tv="using:WinUI.TableView"
+    Title="Detalle del disfraz">
+
+    <Grid Background="White" Padding="24" RowSpacing="24">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- ================== FILA SUPERIOR ================== -->
+        <!-- Imagen + información -->
+        <Grid Grid.Row="0" ColumnSpacing="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Imagen (más chica) -->
+            <Border
+                Width="160"
+                Height="220"
+                CornerRadius="12"
+                Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1">
+
+                <Image
+                    Source="{x:Bind Prenda.Imagen}"
+                    Stretch="UniformToFill"/>
+            </Border>
+
+            <!-- Info prenda -->
+            <StackPanel Grid.Column="1" Spacing="14">
+
+                <TextBlock
+                    Text="{x:Bind Prenda.Nombre}"
+                    FontSize="26"
+                    FontWeight="SemiBold"
+                    TextWrapping="Wrap"/>
+
+                <Border
+                    Padding="10,4"
+                    CornerRadius="6"
+                    Background="{x:Bind Prenda.GeneroColor}"
+                    HorizontalAlignment="Left">
+
+                    <TextBlock
+                        Text="{x:Bind Prenda.GeneroTexto}"
+                        Foreground="White"
+                        FontSize="12"
+                        FontWeight="SemiBold"/>
+                </Border>
+
+                <TextBlock
+                    Text="{x:Bind Prenda.Descripcion}"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    FontSize="14"
+                    TextWrapping="Wrap"
+                    LineHeight="20"
+                    MaxLines="6"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- ================== FILA INFERIOR ================== -->
+        <!-- Tabla de tallas -->
+        <Border
+            Grid.Row="1"
+            Padding="20"
+            CornerRadius="16"
+            Background="#F5F5F5"
+            HorizontalAlignment="Center"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1">
+
+            <StackPanel Spacing="16">
+
+                <TextBlock
+                    Text="Inventario"
+                    FontSize="20"
+                    FontWeight="SemiBold"/>
+
+                <tv:TableView
+                    x:Name="TablaStock"
+                    ItemsSource="{x:Bind Prenda.stockPorTalla}"
+                    AutoGenerateColumns="False"
+                    SelectionMode="None"
+                    IsReadOnly="True">
+                    <tv:TableView.Columns>
+                        <tv:TableViewTextColumn
+                            Header="Talla"
+                            Width="80"
+                            Binding="{Binding Talla}" />
+                        <tv:TableViewTextColumn
+                            Header="Stock"
+                            Width="80"
+                            Binding="{Binding Stock}" />
+                        <tv:TableViewTemplateColumn Header="Acciones" Width="90">
+                            <tv:TableViewTemplateColumn.CellTemplate>
+                                <DataTemplate x:DataType="models:TallaStock">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+
+                                        <!-- Editar -->
+                                        <Button
+                                            Width="28"
+                                            Height="28"
+                                            Padding="0"
+                                            Background="Orange"
+                                            BorderThickness="0"
+                                            ToolTipService.ToolTip="Editar"
+                                            Click="EditarTalla_Click"
+                                            Content="Editar"
+                                            Tag="{Binding}">
+
+                                        </Button>
+
+                                        <!-- Eliminar -->
+                                        <Button
+                                            Width="28"
+                                            Height="28"
+                                            Padding="0"
+                                            Background="IndianRed"
+                                            BorderThickness="0"
+                                            ToolTipService.ToolTip="Eliminar"
+                                            Click="DeleteTalla_Click"
+                                            Content = "Eliminar"
+                                            Tag="{Binding}">
+
+                                        </Button>
+
+                                    </StackPanel>
+                                </DataTemplate>
+                            </tv:TableViewTemplateColumn.CellTemplate>
+                        </tv:TableViewTemplateColumn>
+
+                    </tv:TableView.Columns>
+                </tv:TableView>
+
+                <Button
+                    Content="+ Agregar talla"
+                    Height="40"
+                    FontWeight="SemiBold"
+                    Click="AgregarTalla_Click"/>
+            </StackPanel>
+        </Border>
+
+    </Grid>
+</Window>
+
