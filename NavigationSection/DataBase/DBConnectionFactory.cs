@@ -9,7 +9,7 @@ namespace NavigationSection.DataBase
 {
     public static class DBConnectionFactory
     {
-        private static readonly string _connection = "Server=localhost;Database=titadisfraces;Uid=root;Pwd=rlujan65";
+        private static readonly string _connection = "....";
 
         public static MySqlConnection obtenerConexionBd()
         {
@@ -17,3 +17,4 @@ namespace NavigationSection.DataBase
         }
     }
 }
+
